@@ -3,10 +3,10 @@ import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 //screens!
 import BarcodeScanScreen from './screens/BarcodeScanScreen';
 
-/*const App: React.FC = () => {
+const App: React.FC = () => {
   return <BarcodeScanScreen />;
-};*/
-const App = () => {
+};
+/*const App = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text>
@@ -15,7 +15,7 @@ const App = () => {
       </Text>
     </SafeAreaView>
   );
-};
+};*/
 
 const styles = StyleSheet.create({
   container: {flex: 1, justifyContent: 'center', alignItems: 'center'},
