@@ -1,7 +1,11 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-//will import screens as finished!
+//screens!
+import BarcodeScanScreen from './screens/BarcodeScanScreen';
 
+/*const App: React.FC = () => {
+  return <BarcodeScanScreen />;
+};*/
 const App = () => {
   return (
     <SafeAreaView style={styles.container}>
