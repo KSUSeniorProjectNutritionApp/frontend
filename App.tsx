@@ -2,9 +2,10 @@ import React from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 //screens!
 import BarcodeScanScreen from './screens/BarcodeScanScreen';
+import ScannerView from './components/ScannerView';
 
 const App: React.FC = () => {
-  return <BarcodeScanScreen />;
+  return <ScannerView />;
 };
 /*const App = () => {
   return (

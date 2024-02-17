@@ -1,30 +1,63 @@
-import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {RNCamera, BarCodeReadEvent, RNCameraProps} from 'react-native-camera';
+import React, {useEffect} from 'react';
+import {View, StyleSheet, PermissionsAndroid, Platform} from 'react-native';
+import {
+  Camera,
+  useCameraDevice,
+  useCodeScanner,
+} from 'react-native-vision-camera';
 
-interface ScannerViewProp {
-  onBarcodeScanned: (event: BarCodeReadEvent) => void;
-}
+function ScannerView() {
+  const device = useCameraDevice('back');
 
-const ScannerView: React.FC<ScannerViewProp> = ({onBarcodeScanned}) => {
-  const handleBarCodeRead = (event: BarCodeReadEvent) => {
-    onBarcodeScanned(event);
-  };
+  const codeScanner = useCodeScanner({
+    codeTypes: ['qr', 'ean-13'],
+    onCodeScanned: codes => {
+      console.log(`Scanned ${codes.length} codes!`);
+    },
+  });
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      requestCameraPermission();
+    }
+  }, []);
+
+  async function requestCameraPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Camera Permission',
+          message: 'This app needs access to your camera',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  }
+
+  if (device == null) return <View style={styles.container} />;
 
   return (
     <View style={styles.container}>
-      <RNCamera
-        style={styles.scanner}
-        onBarCodeRead={handleBarCodeRead}
-        barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
+      <Camera
+        style={StyleSheet.absoluteFill}
+        device={device}
+        isActive={true}
+        codeScanner={codeScanner}
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {flex: 1, flexDirection: 'row'},
-  scanner: {flex: 1, justifyContent: 'flex-end', alignItems: 'center'},
+  container: {flex: 1},
 });
 
 export default ScannerView;
