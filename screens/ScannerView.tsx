@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   Platform,
   Text,
   Button,
+  Alert,
 } from 'react-native';
 import {
   Camera,
@@ -15,14 +16,40 @@ import {
 
 function ScannerView() {
   const device = useCameraDevice('back');
+  const [isScanned, setIsScanned] = useState(false);
 
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
     onCodeScanned: codes => {
-      console.log(`Scanned ${codes} codes!`);
-      codes.forEach(code => {
+      if (!isScanned && codes.length > 0) {
+        setIsScanned(true);
+        const code = codes[0];
+        Alert.alert(
+          'Item Scanned',
+          `An item has been scanned with barcode: ${code.value}`, //this will be replaced with item name
+          [
+            {
+              text: 'Cancel',
+              onPress: () => {
+                console.log('Cancel Pressed');
+                setIsScanned(false);
+              },
+              style: 'cancel',
+            },
+            {
+              text: 'Confirm',
+              onPress: () => {
+                console.log('Confirm Pressed');
+                setIsScanned(false);
+              },
+            },
+          ],
+          {cancelable: false},
+        );
+      }
+      /*codes.forEach(code => {
         console.log(`Code Type: ${code.value}`);
-      });
+      });*/
     },
   });
 
