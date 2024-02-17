@@ -1,7 +1,6 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 //screens!
-import BarcodeScanScreen from './screens/BarcodeScanScreen';
 import ScannerView from './screens/ScannerView';
 
 const App: React.FC = () => {
