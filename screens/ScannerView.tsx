@@ -94,12 +94,16 @@ function ScannerView() {
           codeScanner={codeScanner}
         />
       </View>
-      <View style={styles.backButtonContainer}>
-        <Button title="Back" onPress={() => console.log('back')} />
-      </View>
     </View>
   );
 }
+
+/*
+removed button because adding navigator stack added a button by default i love navigator!
+<View style={styles.backButtonContainer}>
+  <Button title="Back" onPress={() => console.log('back')} />
+</View>
+*/
 
 const styles = StyleSheet.create({
   container: {
