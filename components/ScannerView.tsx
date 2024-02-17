@@ -12,7 +12,10 @@ function ScannerView() {
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
     onCodeScanned: codes => {
-      console.log(`Scanned ${codes.length} codes!`);
+      console.log(`Scanned ${codes} codes!`);
+      codes.forEach(code => {
+        console.log(`Code Type: ${code.value}`);
+      });
     },
   });
 
