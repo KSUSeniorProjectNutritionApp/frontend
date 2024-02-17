@@ -1,5 +1,12 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, PermissionsAndroid, Platform} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  PermissionsAndroid,
+  Platform,
+  Text,
+  Button,
+} from 'react-native';
 import {
   Camera,
   useCameraDevice,
@@ -49,18 +56,51 @@ function ScannerView() {
 
   return (
     <View style={styles.container}>
-      <Camera
-        style={StyleSheet.absoluteFill}
-        device={device}
-        isActive={true}
-        codeScanner={codeScanner}
-      />
+      <Text style={styles.instructions}>
+        Point your camera at a barcode to scan it.
+      </Text>
+      <View style={styles.cameraContainer}>
+        <Camera
+          style={styles.camera}
+          device={device}
+          isActive={true}
+          codeScanner={codeScanner}
+        />
+      </View>
+      <View style={styles.backButtonContainer}>
+        <Button title="Back" onPress={() => console.log('back')} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingTop: 30,
+  },
+  cameraContainer: {
+    marginTop: '15%',
+    width: '80%',
+    height: 200,
+    overflow: 'hidden',
+    borderRadius: 20,
+    marginBottom: 20,
+  },
+  camera: {
+    width: '100%',
+    height: '100%',
+  },
+  instructions: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  backButtonContainer: {
+    marginTop: '100%',
+  },
 });
 
 export default ScannerView;
