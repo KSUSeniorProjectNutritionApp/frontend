@@ -5,6 +5,11 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 //screens!
 import ScannerView from './screens/ScannerView';
 import HomeScreen from './screens/HomeScreen';
+//little notes!
+/*
+npx react-native start --reset-cache
+  the --reset-cache tag fixes like 70% of all of the errors i run into
+*/
 
 const Stack = createNativeStackNavigator();
 
