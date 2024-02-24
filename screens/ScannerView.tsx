@@ -14,7 +14,7 @@ import {
   useCodeScanner,
 } from 'react-native-vision-camera';
 
-function ScannerView() {
+const ScannerView: React.FC<{navigation: any}> = ({navigation}) => {
   const device = useCameraDevice('back');
   const [isScanned, setIsScanned] = useState(false);
 
@@ -39,7 +39,7 @@ function ScannerView() {
             {
               text: 'Confirm',
               onPress: () => {
-                console.log('Confirm Pressed');
+                navigation.navigate('Nutrition');
                 setIsScanned(false);
               },
             },
@@ -96,7 +96,7 @@ function ScannerView() {
       </View>
     </View>
   );
-}
+};
 
 /*
 removed button because adding navigator stack added a button by default i love navigator!

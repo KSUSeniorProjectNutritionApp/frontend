@@ -5,6 +5,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 //screens!
 import ScannerView from './screens/ScannerView';
 import HomeScreen from './screens/HomeScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import NutritionFactScreen from './screens/NutritionFactScanner';
 //little notes!
 /*
 npx react-native start --reset-cache
@@ -18,7 +20,9 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Nutrition" component={NutritionFactScreen} />
         <Stack.Screen name="Scanner" component={ScannerView} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

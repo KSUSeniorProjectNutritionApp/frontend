@@ -17,6 +17,11 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
     navigation.navigate('Scanner');
   };
 
+  const openProfile = () => {
+    console.log('Open Profile');
+    navigation.navigate('Profile');
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.appName}>NUTRITION APP</Text>
@@ -38,7 +43,7 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
         <TouchableOpacity onPress={openScanner}>
           <Text style={styles.footerText}>📸 Scan</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log('Profile')}>
+        <TouchableOpacity onPress={openProfile}>
           <Text style={styles.footerText}>👤 Profile</Text>
         </TouchableOpacity>
       </View>
