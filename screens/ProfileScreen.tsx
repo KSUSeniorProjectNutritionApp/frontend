@@ -2,17 +2,30 @@ import React from 'react';
 import {
   View,
   StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Text,
   Image,
+  Text,
+  TouchableOpacity,
+  Button,
 } from 'react-native';
+import {CommonActions} from '@react-navigation/native';
 
 const ProfileScreen: React.FC<{navigation: any}> = ({navigation}) => {
   const username = 'User Name';
   const email = 'user@example.com';
-  const onSettingsPress = () => console.log('Go to settings');
-  const onLogoutPress = () => console.log('Log out');
+  const onSettingsPress = () => {
+    console.log('Go to settings');
+    navigation.navigate('Settings');
+  };
+  const onLogoutPress = () => {
+    console.log('Log out');
+    // This will reset the navigation stack and navigate to the Onboarding screen
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{name: 'Onboarding'}],
+      }),
+    );
+  };
 
   return (
     <View style={styles.container}>
