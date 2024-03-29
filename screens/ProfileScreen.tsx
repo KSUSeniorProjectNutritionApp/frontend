@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFF5EE',
   },
   profileHeader: {
     alignItems: 'center',
@@ -61,15 +62,18 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     marginBottom: 10,
+    borderWidth: 3,
+    borderColor: '#FFB07B',
   },
   name: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 5,
+    color: '#FFB07B',
   },
   email: {
     fontSize: 18,
-    color: 'gray',
+    color: '#A2543D',
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -79,11 +83,12 @@ const styles = StyleSheet.create({
   button: {
     padding: 10,
     margin: 10,
-    backgroundColor: '#007bff',
+    backgroundColor: '#FFB07B',
     borderRadius: 5,
   },
   buttonText: {
-    color: 'white',
+    color: '#FFF5EE',
+    fontWeight: 'bold',
   },
 });
 

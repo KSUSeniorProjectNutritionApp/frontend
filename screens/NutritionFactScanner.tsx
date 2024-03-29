@@ -32,7 +32,7 @@ const NutritionFactScreen: React.FC<{navigation: any}> = ({navigation}) => {
     <View
       style={[
         styles.row,
-        {backgroundColor: index % 2 === 0 ? '#f0f0f0' : '#e0e0e0'},
+        {backgroundColor: index % 2 === 0 ? '#FFF5EE' : '#FFB07B'},
       ]}>
       <Text style={styles.key}>{item.key}</Text>
       <Text style={styles.value}>{item.value}</Text>
@@ -44,28 +44,48 @@ const NutritionFactScreen: React.FC<{navigation: any}> = ({navigation}) => {
       data={data}
       renderItem={renderItem}
       keyExtractor={(item, index) => index.toString()}
-      ListHeaderComponent={<Text style={styles.header}>Nutrition Facts</Text>}
+      ListHeaderComponent={
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Nutrition Facts</Text>
+        </View>
+      }
     />
   );
 };
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    backgroundColor: '#FFF5EE',
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    width: '100%',
+  },
   header: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 20,
+    color: '#FFB07B',
+    backgroundColor: '#FFF5EE',
   },
   row: {
     flexDirection: 'row',
-    padding: 10,
+    padding: 15,
     justifyContent: 'space-between',
+    borderWidth: 0,
+    borderColor: '#FFB07B',
   },
   key: {
+    flex: 1,
     fontWeight: 'bold',
+    color: '#5F4B32',
+    fontSize: 18,
   },
   value: {
+    flex: 1,
     textAlign: 'right',
+    color: '#5F4B32',
+    fontSize: 18,
   },
 });
 

@@ -79,7 +79,10 @@ const ScannerView: React.FC<{navigation: any}> = ({navigation}) => {
     }
   }
 
-  if (device == null) return <View style={styles.container} />;
+  if (device == null) {
+    console.log('!!!');
+    return <View style={styles.container} />;
+  }
 
   return (
     <View style={styles.container}>
@@ -111,6 +114,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingTop: 30,
+    backgroundColor: '#FFF5EE',
   },
   cameraContainer: {
     marginTop: '15%',
@@ -119,6 +123,15 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderRadius: 20,
     marginBottom: 20,
+    borderColor: '#FFB07B',
+    borderWidth: 2,
+    // iOS shadow properties:
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    // Android elevation:
+    elevation: 20,
   },
   camera: {
     width: '100%',
@@ -128,10 +141,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 20,
+    color: '#FFB07B',
   },
-  backButtonContainer: {
+  /**backButtonContainer: {
     marginTop: '100%',
-  },
+  },**/
 });
 
 export default ScannerView;

@@ -39,6 +39,8 @@ const SettingsScreen: React.FC<{navigation: any}> = ({navigation}) => {
         <View style={styles.settingRow}>
           <Text>Push Notifications</Text>
           <Switch
+            trackColor={styles.switchStyle.trackColor}
+            thumbColor={styles.switchStyle.thumbColor}
             onValueChange={togglePushNotifications}
             value={isPushNotificationsEnabled}
           />
@@ -46,6 +48,8 @@ const SettingsScreen: React.FC<{navigation: any}> = ({navigation}) => {
         <View style={styles.settingRow}>
           <Text>Email Notifications</Text>
           <Switch
+            trackColor={styles.switchStyle.trackColor}
+            thumbColor={styles.switchStyle.thumbColor}
             onValueChange={toggleEmailNotifications}
             value={isEmailNotificationsEnabled}
           />
@@ -55,7 +59,12 @@ const SettingsScreen: React.FC<{navigation: any}> = ({navigation}) => {
         <Text style={styles.sectionTitle}>Display</Text>
         <View style={styles.settingRow}>
           <Text>Dark Mode</Text>
-          <Switch onValueChange={toggleDarkMode} value={isDarkModeEnabled} />
+          <Switch
+            trackColor={styles.switchStyle.trackColor}
+            thumbColor={styles.switchStyle.thumbColor}
+            onValueChange={toggleDarkMode}
+            value={isDarkModeEnabled}
+          />
         </View>
       </View>
       <View style={styles.section}>
@@ -85,11 +94,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#FFF5EE',
   },
   header: {
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#FFB07B',
   },
   section: {
     marginBottom: 20,
@@ -98,13 +109,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#FFB07B',
   },
   settingRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 10,
+    padding: 10,
+    backgroundColor: '#FAE5D3',
+    borderRadius: 10,
+  },
+  switchStyle: {
+    trackColor: {false: '#767577', true: '#FFB07B'},
+    thumbColor: '#FFF5EE',
   },
 });
-
 export default SettingsScreen;

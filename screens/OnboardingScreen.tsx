@@ -1,22 +1,23 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  Button,
-} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 
 const OnboardingScreen: React.FC<{navigation: any}> = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>🌟 Nutriton App 🌟</Text>
+      <Text style={styles.title}>🌟 Nutrition App 🌟</Text>
       <Text style={styles.description}>Welcome!</Text>
 
       <View style={styles.buttonContainer}>
-        <Button title="LOGIN" onPress={() => navigation.navigate('Login')} />
-        <Button title="SIGN UP" onPress={() => navigation.navigate('Signup')} />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.buttonText}>LOGIN</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Signup')}>
+          <Text style={styles.buttonText}>SIGN UP</Text>
+        </TouchableOpacity>
       </View>
 
       <Text style={styles.footerText}>
@@ -32,16 +33,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: '#FFF5EE',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#FFB07B',
   },
   description: {
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 20,
+    color: '#5F4B32',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -53,6 +57,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     marginTop: 20,
+    color: '#5F4B32',
+  },
+  button: {
+    padding: 10,
+    margin: 10,
+    backgroundColor: '#FFB07B',
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#FFF5EE',
+    fontWeight: 'bold',
   },
 });
 

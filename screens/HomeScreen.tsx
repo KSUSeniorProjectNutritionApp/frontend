@@ -58,11 +58,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 50,
     paddingBottom: 20,
+    backgroundColor: '#FAE5D3',
   },
   appName: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#FFB07B',
   },
   searchBar: {
     height: 40,
@@ -71,10 +73,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 20,
-    borderColor: '#ddd',
+    borderColor: '#FAD4C0',
+    backgroundColor: '#FFF5EE',
   },
   scanButton: {
-    backgroundColor: '#007BFF',
+    backgroundColor: '#FFB07B',
     padding: 20,
     borderRadius: 20,
     marginBottom: 20,
@@ -90,6 +93,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 16,
+    color: '#FFB07B',
   },
 });
 

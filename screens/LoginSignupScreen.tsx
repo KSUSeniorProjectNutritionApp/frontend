@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 
 // LoginScreen
 const LoginScreen: React.FC<{navigation: any}> = ({navigation}) => {
@@ -28,11 +34,14 @@ const LoginScreen: React.FC<{navigation: any}> = ({navigation}) => {
         placeholder="Enter your password"
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
-      <Button
-        title="Don't have an account? Sign Up"
-        onPress={() => navigation.navigate('Signup')}
-      />
+      <TouchableOpacity style={styles.buttonTopCurve} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.buttonBottomCurve}
+        onPress={() => navigation.navigate('Signup')}>
+        <Text style={styles.buttonText}>Don't have an account? Sign Up</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -44,7 +53,7 @@ const SignupScreen: React.FC<{navigation: any}> = ({navigation}) => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleSignup = () => {
-    console.log('Signup with:', email, password);
+    console.log('Signup with:', email, password, confirmPassword);
     navigation.navigate('Home');
   };
 
@@ -73,11 +82,14 @@ const SignupScreen: React.FC<{navigation: any}> = ({navigation}) => {
         placeholder="Confirm your password"
         secureTextEntry
       />
-      <Button title="Sign Up" onPress={handleSignup} />
-      <Button
-        title="Already have an account? Login"
-        onPress={() => navigation.navigate('Login')}
-      />
+      <TouchableOpacity style={styles.buttonTopCurve} onPress={handleSignup}>
+        <Text style={styles.buttonText}>Sign Up</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.buttonBottomCurve}
+        onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.buttonText}>Already have an account? Login</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -87,13 +99,35 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
+    backgroundColor: '#FFF5EE',
   },
   input: {
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: '#FFB07B',
     marginBottom: 20,
     padding: 10,
     borderRadius: 5,
+    color: '#5F4B32',
+    backgroundColor: '#FAE5D3',
+  },
+  buttonTopCurve: {
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: '#FFB07B',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    alignItems: 'center',
+  },
+  buttonBottomCurve: {
+    padding: 10,
+    backgroundColor: '#FFB07B',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#FFF5EE',
+    fontWeight: 'bold',
   },
 });
 
