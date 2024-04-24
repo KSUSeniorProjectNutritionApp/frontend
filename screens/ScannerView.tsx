@@ -5,8 +5,8 @@ import {
   PermissionsAndroid,
   Platform,
   Text,
-  Button,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import {
   Camera,
@@ -14,9 +14,81 @@ import {
   useCodeScanner,
 } from 'react-native-vision-camera';
 
+interface ApiResponse {
+  fdcId: number;
+  description: string;
+  foodNutrients: Array<{
+    id: number;
+    nutrient: {
+      id: number;
+      name: string;
+      unitName: string;
+    };
+    amount: number;
+  }>;
+  brandOwner: string;
+  gtinUpc: string;
+  ingredients: string;
+  servingSize: number;
+  servingSizeUnit: string;
+}
+
 const ScannerView: React.FC<{navigation: any}> = ({navigation}) => {
   const device = useCameraDevice('back');
   const [isScanned, setIsScanned] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
+
+  const apiCall = async (itemBarCode: string) => {
+    setIsLoading(true);
+    try {
+      console.log('Starting API call...');
+      const response = await fetch('http://ksu.michaelehme.me/barcode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({barcode: itemBarCode}),
+      });
+      if (!response.ok) throw new Error('Network response was not ok.');
+      const data: ApiResponse = await response.json();
+      setApiResponse(data);
+      console.log('Item Description:', data.description);
+      //Alert.alert('API Response', data.description);
+      navigation.navigate('Nutrition', {data: data});
+      //return data;
+    } catch (error) {
+      console.error('API call failed:', error);
+      Alert.alert('Scan Error', 'Failed to fetch item data, please try again.');
+      setIsScanned(false);
+    } finally {
+      setIsScanned(false);
+      setIsLoading(false);
+    }
+  };
+
+  const confirmBarcode = (barcodeValue: string) => {
+    Alert.alert(
+      'Confirm Barcode',
+      `Is this the correct barcode: ${barcodeValue}?`,
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {
+            console.log('Barcode confirmation canceled.');
+            setIsScanned(false);
+          },
+          style: 'cancel',
+        },
+        {
+          text: 'Confirm',
+          onPress: () => {
+            apiCall(barcodeValue);
+          },
+        },
+      ],
+    );
+  };
 
   const codeScanner = useCodeScanner({
     codeTypes: ['qr', 'ean-13'],
@@ -24,32 +96,8 @@ const ScannerView: React.FC<{navigation: any}> = ({navigation}) => {
       if (!isScanned && codes.length > 0) {
         setIsScanned(true);
         const code = codes[0];
-        Alert.alert(
-          'Item Scanned',
-          `An item has been scanned with barcode: ${code.value}`, //this will be replaced with item name
-          [
-            {
-              text: 'Cancel',
-              onPress: () => {
-                console.log('Cancel Pressed');
-                setIsScanned(false);
-              },
-              style: 'cancel',
-            },
-            {
-              text: 'Confirm',
-              onPress: () => {
-                navigation.navigate('Nutrition');
-                setIsScanned(false);
-              },
-            },
-          ],
-          {cancelable: false},
-        );
+        confirmBarcode(code.value);
       }
-      /*codes.forEach(code => {
-        console.log(`Code Type: ${code.value}`);
-      });*/
     },
   });
 
@@ -80,7 +128,6 @@ const ScannerView: React.FC<{navigation: any}> = ({navigation}) => {
   }
 
   if (device == null) {
-    console.log('!!!');
     return <View style={styles.container} />;
   }
 
@@ -96,6 +143,11 @@ const ScannerView: React.FC<{navigation: any}> = ({navigation}) => {
           isActive={true}
           codeScanner={codeScanner}
         />
+        {isLoading && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="#FFB07B" />
+          </View>
+        )}
       </View>
     </View>
   );
@@ -142,6 +194,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
     color: '#FFB07B',
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   /**backButtonContainer: {
     marginTop: '100%',

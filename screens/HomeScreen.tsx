@@ -24,7 +24,7 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
     navigation.navigate('Profile');
   };
 
-  const testApiCall = async () => {
+  /*const testApiCall = async () => {
     try {
       console.log('Starting API call...');
       const response = await fetch('http://ksu.michaelehme.me/barcode', {
@@ -34,17 +34,22 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
         },
         body: JSON.stringify({barcode: '1633636543505'}),
       });
-      console.log('Fetch completed, processing response...');
       const data = await response.json();
       setApiResponse(data);
 
       Alert.alert('API Response', JSON.stringify(data, null, 2));
-      console.log(2);
+      console.log(JSON.stringify(data, null, 2));
     } catch (error) {
       console.error('API call failed:', error);
       Alert.alert('Error', 'Failed to fetch data from API');
     }
   };
+  
+  <TouchableOpacity style={styles.scanButton} onPress={testApiCall}>
+        <Text style={styles.scanButtonText}>Test API Call</Text>
+      </TouchableOpacity>
+  
+  */
 
   return (
     <View style={styles.container}>
@@ -56,9 +61,6 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
       />
       <TouchableOpacity style={styles.scanButton} onPress={openScanner}>
         <Text style={styles.scanButtonText}>Scan Barcode 📷</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.scanButton} onPress={testApiCall}>
-        <Text style={styles.scanButtonText}>Test API Call</Text>
       </TouchableOpacity>
       <View style={styles.footer}>
         <TouchableOpacity onPress={() => console.log('Home')}>
