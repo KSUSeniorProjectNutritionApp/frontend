@@ -62,7 +62,6 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
       <Text style={styles.company}>{item.brandOwner}</Text>
     </TouchableOpacity>
   );
-  //console.log(item.description)
 
   return (
     <View style={styles.container}>
@@ -72,7 +71,7 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
         placeholder="Search for food items"
         value={searchText}
         onChangeText={handleSearch}
-        editable={!isLoading} // Disable input while loading
+        editable={!isLoading}
       />
       <TouchableOpacity
         style={styles.scanButton}
@@ -99,6 +98,12 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
         onPress={openScanner}
         disabled={isLoading}>
         <Text style={styles.scanButtonText}>Scan Barcode 📷</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.scanButton}
+        onPress={() => navigation.navigate('Settings')}
+        disabled={isLoading}>
+        <Text style={styles.scanButtonText}>Allergy Settings ⚙️</Text>
       </TouchableOpacity>
     </View>
   );
