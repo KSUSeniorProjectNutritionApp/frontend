@@ -6,12 +6,42 @@ import {
   TouchableOpacity,
   Text,
   Alert,
+  FlatList,
+  ActivityIndicator,
 } from 'react-native';
 
 const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
-  const [apiResponse, setApiResponse] = useState(null);
+  const [searchText, setSearchText] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSearch = (text: string) => {
-    console.log('Search for:', text);
+    setSearchText(text);
+  };
+
+  const testApiCall = async () => {
+    setIsLoading(true);
+    try {
+      console.log('Starting API call...');
+      const response = await fetch('http://ksu.michaelehme.me/query', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({keywords: searchText, hits: 5}),
+      });
+      const data = await response.json();
+      setIsLoading(false);
+      if (data && data.length > 0) {
+        setSearchResults(data);
+      } else {
+        Alert.alert('No results found');
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error('API call failed:', error);
+      Alert.alert('Error', 'Failed to fetch data from API');
+    }
   };
 
   const openScanner = () => {
@@ -24,32 +54,15 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
     navigation.navigate('Profile');
   };
 
-  /*const testApiCall = async () => {
-    try {
-      console.log('Starting API call...');
-      const response = await fetch('http://ksu.michaelehme.me/barcode', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({barcode: '1633636543505'}),
-      });
-      const data = await response.json();
-      setApiResponse(data);
-
-      Alert.alert('API Response', JSON.stringify(data, null, 2));
-      console.log(JSON.stringify(data, null, 2));
-    } catch (error) {
-      console.error('API call failed:', error);
-      Alert.alert('Error', 'Failed to fetch data from API');
-    }
-  };
-  
-  <TouchableOpacity style={styles.scanButton} onPress={testApiCall}>
-        <Text style={styles.scanButtonText}>Test API Call</Text>
-      </TouchableOpacity>
-  
-  */
+  const renderSearchResult = ({item}) => (
+    <TouchableOpacity
+      style={styles.resultItem}
+      onPress={() => navigation.navigate('Nutrition', {data: item})}>
+      <Text style={styles.description}>{item.description}</Text>
+      <Text style={styles.company}>{item.brandOwner}</Text>
+    </TouchableOpacity>
+  );
+  //console.log(item.description)
 
   return (
     <View style={styles.container}>
@@ -57,28 +70,62 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
       <TextInput
         style={styles.searchBar}
         placeholder="Search for food items"
+        value={searchText}
         onChangeText={handleSearch}
+        editable={!isLoading} // Disable input while loading
       />
-      <TouchableOpacity style={styles.scanButton} onPress={openScanner}>
+      <TouchableOpacity
+        style={styles.scanButton}
+        onPress={testApiCall}
+        disabled={isLoading}>
+        <Text style={styles.scanButtonText}>Search 🔍</Text>
+        {isLoading && <ActivityIndicator size="small" color="#ffffff" />}
+      </TouchableOpacity>
+      <FlatList
+        data={searchResults}
+        renderItem={({item}) => (
+          <TouchableOpacity
+            style={styles.resultItem}
+            onPress={() => navigation.navigate('Nutrition', {data: item})}
+            disabled={isLoading}>
+            <Text style={styles.description}>{item.description}</Text>
+            <Text style={styles.company}>{item.brandOwner}</Text>
+          </TouchableOpacity>
+        )}
+        keyExtractor={item => item.fdcId.toString()}
+      />
+      <TouchableOpacity
+        style={styles.scanButton}
+        onPress={openScanner}
+        disabled={isLoading}>
         <Text style={styles.scanButtonText}>Scan Barcode 📷</Text>
       </TouchableOpacity>
-      <View style={styles.footer}>
-        <TouchableOpacity onPress={() => console.log('Home')}>
-          <Text style={styles.footerText}>🏠 Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log('Search')}>
-          <Text style={styles.footerText}>🔍 Search</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={openScanner}>
-          <Text style={styles.footerText}>📸 Scan</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={openProfile}>
-          <Text style={styles.footerText}>👤 Profile</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
+
+/* No api for profiles, so no navigation to profile screens needed
+<View style={styles.footer}>
+        <TouchableOpacity
+          onPress={() => console.log('Home')}
+          disabled={isLoading}>
+          <Text style={styles.footerText}>🏠 Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={testApiCall} disabled={isLoading}>
+          <Text style={styles.footerText}>🔍 Search</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Scanner')}
+          disabled={isLoading}>
+          <Text style={styles.footerText}>📸 Scan</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Profile')}
+          disabled={isLoading}>
+          <Text style={styles.footerText}>👤 Profile</Text>
+        </TouchableOpacity>
+      </View>
+*/
 
 const styles = StyleSheet.create({
   container: {
@@ -110,6 +157,9 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 20,
     marginBottom: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   scanButtonText: {
     fontSize: 18,
@@ -123,6 +173,19 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: 16,
     color: '#FFB07B',
+  },
+  resultItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  description: {
+    fontSize: 16,
+    color: '#333',
+  },
+  company: {
+    fontSize: 14,
+    color: '#666',
   },
 });
 
