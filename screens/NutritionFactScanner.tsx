@@ -281,7 +281,9 @@ const NutritionFactScreen: React.FC<{route: any; navigation: any}> = ({
     {key: 'Ingredients', value: itemInfo.ingredients || itemInfo.description},
     ...itemInfo.foodNutrients.map(nutrient => ({
       key: nutrient.nutrient.name,
-      value: `${nutrient.amount/100*(itemInfo.servingSize || 100)} ${nutrient.nutrient.unitName}`,
+      value: `${Number.isInteger(nutrient.amount/100*(itemInfo.servingSize || 100)) 
+      ? nutrient.amount/100*(itemInfo.servingSize || 100) 
+      : (nutrient.amount/100*(itemInfo.servingSize || 100)).toFixed(1)} ${nutrient.nutrient.unitName}`,
     })),
   ];
 
