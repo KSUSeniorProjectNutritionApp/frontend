@@ -274,14 +274,14 @@ const NutritionFactScreen: React.FC<{route: any; navigation: any}> = ({
   const data = [
     {key: 'Product Name', value: itemInfo.description},
     {
-      key: 'Serving Size',
-      value: `${itemInfo.servingSize} ${itemInfo.servingSizeUnit}`,
+      key: itemInfo.servingSize ? 'Serving Size': 'Base Measurement',
+      value: `${itemInfo.servingSize || '100'} ${itemInfo.servingSizeUnit || 'g'}`,
     },
-    {key: 'Brand Owner', value: itemInfo.brandOwner},
-    {key: 'Ingredients', value: itemInfo.ingredients},
+    {key: 'Brand Owner', value: itemInfo.brandOwner || 'NA'},
+    {key: 'Ingredients', value: itemInfo.ingredients || itemInfo.description},
     ...itemInfo.foodNutrients.map(nutrient => ({
       key: nutrient.nutrient.name,
-      value: `${nutrient.amount} ${nutrient.nutrient.unitName}`,
+      value: `${nutrient.amount/100*(itemInfo.servingSize || 100)} ${nutrient.nutrient.unitName}`,
     })),
   ];
 
