@@ -28,7 +28,7 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({keywords: searchText, hits: 5}),
+        body: JSON.stringify({keywords: searchText, hits: 10}),
       });
       const data = await response.json();
       setIsLoading(false);
