@@ -14,7 +14,7 @@ const SettingsScreen: React.FC<{navigation: any}> = ({navigation}) => {
       <Text style={styles.header}>Allergy Settings</Text>
       {Object.entries(allergyToggles).map(([allergy, isEnabled]) => (
         <View style={styles.settingRow} key={allergy}>
-          <Text>{allergy.charAt(0).toUpperCase() + allergy.slice(1)}</Text>
+          <Text style={styles.textDefault}>{(allergy.charAt(0).toUpperCase() + allergy.slice(1)).replace('_',' ')}</Text>
           <Switch
             trackColor={{false: '#767577', true: '#FFB07B'}}
             thumbColor={isEnabled ? '#FFF5EE' : '#f4f3f4'}
@@ -50,6 +50,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAE5D3',
     borderRadius: 10,
   },
+  textDefault: {
+    color: '#000',
+  }
 });
 
 export default SettingsScreen;
