@@ -1,19 +1,16 @@
-import React, {createContext, useState, useContext, ReactNode} from 'react';
+import React, {useContext} from 'react';
 import {
     View,
     StyleSheet,
     TextInput,
     TouchableOpacity,
     Text,
-    Alert,
     FlatList,
-    Button,
-    ActivityIndicator,
   } from 'react-native';
 import { dailyContext } from './NutritionContext';
 
-const DailyNutrition: React.FC<{}> = ({}) => {
-    const [[items, setItems], [nutrients, setNutrients], [amounts, setAmounts], [total, setTotal]] = useContext(dailyContext);
+const DailyNutrition: React.FC<{navigation: any}> = ({navigation}) => {
+    const [[items, setItems], [nutrients, setNutrients],[amounts, setAmounts],[total, setTotal],[amountP, setAmountsP],[totalP, setTotalP],[amountC, setAmountsC],[totalC, setTotalC],[amountF, setAmountsF],[totalF, setTotalF]] = useContext(dailyContext);
     const wrapWords = (text:string) => {
         if (text.length > 20) {
             let words = text.split(' ')
@@ -32,8 +29,49 @@ const DailyNutrition: React.FC<{}> = ({}) => {
         }
         return text
     }
+
+    const findCarbs = (nutrients) => {
+        let simplify = nutrients.map(element => {
+          return [element.amount, element.nutrient.name]
+      })
+  
+      for (let step = 0; step < simplify.length; step++) {
+        [num, name] = simplify[step]
+        if (name.toUpperCase().includes('CARBO')) {
+            return num
+        }
+      }
+      return 0;
+    }
+  
+    const findFat = (nutrients) => {
+      let simplify = nutrients.map(element => {
+        return [element.amount, element.nutrient.name]
+    })
+  
+    for (let step = 0; step < simplify.length; step++) {
+      [num, name] = simplify[step]
+      if (name.toUpperCase().includes('FAT')) {
+          return num
+      }
+    }
+    return 0;
+  }
+  
+  const findProtein = (nutrients) => {
+      let simplify = nutrients.map(element => {
+        return [element.amount, element.nutrient.name]
+    })
+  
+    for (let step = 0; step < simplify.length; step++) {
+      [num, name] = simplify[step]
+      if (name.toUpperCase().includes('PROTEIN')) {
+          return num
+      }
+    }
+    return 0;
+  }
     const findEnergy = (nutrients)=>{
-        console.log()
         let simplify = nutrients.map(element => {
             return [element.amount, element.nutrient.name]
         })
@@ -46,21 +84,54 @@ const DailyNutrition: React.FC<{}> = ({}) => {
         }
         return 0;
     }
-    const mysum = () => {return amounts.reduce((a, b) => a+b, 0)}
+    const mysum = (myamounts) => {try {
+        return myamounts.reduce((a, b) => a+b, 0) }
+        catch (error) {
+            console.log(error)
+            return 0
+        }
+    }
     return (<View style = {styles.headerContainer}>
-        <Text style={styles.header}>{`Daily Calories: ${total}`}</Text>
+        <Text style={styles.header}>{`Daily Calories: ${total.toFixed(2)}`}</Text>
+        <Text style={styles.header}>{`Daily Carbohydrates: ${totalC.toFixed(2)}`}</Text>
+        <Text style={styles.header}>{`Daily Fat: ${totalF.toFixed(2)}`}</Text>
+        <Text style={styles.header}>{`Daily Protein: ${totalP.toFixed(2)}`}</Text>
+
         <FlatList
         data={items}
         renderItem={({item, index}) => (<View style={styles.row}>
-            <Text style={styles.textLeft}>{wrapWords(item.description)}</Text>
+            <TouchableOpacity style={styles.textLeft} onPress={
+                () => navigation.navigate('Nutrition', {data: item})
+            }>
+                <Text style={styles.textLeft}>{wrapWords(item.description)}</Text>
+            </TouchableOpacity>
             <View style={styles.rightrow}>
                 <TextInput
                 style={styles.input}
                 inputMode='numeric'
                 onChangeText={(num) => {
-                    amounts[index] = Number(num)*findEnergy(nutrients[index])/(item.servingSize || 100)
+                    // console.log(num, findEnergy(nutrients[index]), item.servingSize)
+                    const energy = findEnergy(nutrients[index])
+                    const fat = findFat(nutrients[index])
+                    const carb = findCarbs(nutrients[index])
+                    const protein = findProtein(nutrients[index])
+
+                    const adjusted = (value) => {return value/100*(item.servingSize || 100)}
+                    // console.log(energy, adjusted(energy))
+                    amounts[index] = Number(num)*adjusted(energy)/(item.servingSize || 100)
+                    amountP[index] = Number(num)*adjusted(protein)/(item.servingSize || 100)
+                    amountC[index] = Number(num)*adjusted(carb)/(item.servingSize || 100)
+                    amountF[index] = Number(num)*adjusted(fat)/(item.servingSize || 100)
+                    console.log(amounts[index])
                     setAmounts(amounts)
-                    setTotal(mysum())
+                    setAmountsC(amountC)
+                    setAmountsF(amountF)
+                    setAmountsP(amountP)
+                    setTotal(mysum(amounts))
+                    setTotalC(mysum(amountC))
+                    setTotalF(mysum(amountF))
+                    setTotalP(mysum(amountP))
+
                 }}
                 defaultValue={item.servingSize.toString() || '100'}/>
                 <Text style={styles.textRight}>{item.servingSizeUnit || 'g'}</Text>
@@ -69,10 +140,17 @@ const DailyNutrition: React.FC<{}> = ({}) => {
             <TouchableOpacity
             style={styles.scanButton}
             onPress={() => {setItems([])
-                setAmounts(amounts)
-                setTotal(total)
-                
-            }}>
+                setNutrients([])
+                setAmounts([])
+                setAmountsC([])
+                setAmountsF([])
+                setAmountsP([])
+                setTotal(0)
+                setTotalC(0)
+                setTotalF(0)
+                setTotalP(0)
+                console.log(items, nutrients, amounts, total)}
+                }>
                 <Text style= {styles.scanButtonText}>Clear list</Text>
             </TouchableOpacity>
     </View>);
@@ -95,17 +173,17 @@ const styles = StyleSheet.create({
     },
     textLeft: {
         fontSize: 15,
-        fontWeight: 'bold',
+        // fontWeight: 'bold',
         textAlign: 'left',
         // marginVertical: 20,
-        color: '#FFB07B',
+        color: '#333',
     },
     textRight: {
         fontSize: 15,
-        fontWeight: 'bold',
+        // fontWeight: 'bold',
         textAlign: 'right',
         // marginVertical: 20,
-        color: '#FFB07B',
+        color: '#333',
     },
     leftItem: {
         flexDirection: 'row',
@@ -115,8 +193,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal: 20,
         justifyContent: 'space-around',
-        borderWidth: 2,
-        borderColor: '#FFB07B',
+        borderTopWidth: 2,
+        borderColor: '#ccc',
         alignItems: 'center',
     },
     rightrow: {

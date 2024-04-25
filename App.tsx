@@ -28,9 +28,15 @@ function App() {
   const [nutrients, setNutrients] = useState([])
   const [amounts, setAmounts] = useState([]);
   const [total, setTotal] = useState(0);
+  const [amountP, setAmountsP] = useState([]);
+  const [totalP, setTotalP] = useState(0);
+  const [amountC, setAmountsC] = useState([]);
+  const [totalC, setTotalC] = useState(0);
+  const [amountF, setAmountsF] = useState([]);
+  const [totalF, setTotalF] = useState(0);
 
   return (
-    <dailyContext.Provider value={[[items, setItems], [nutrients, setNutrients],[amounts, setAmounts],[total, setTotal]]}>
+    <dailyContext.Provider value={[[items, setItems], [nutrients, setNutrients],[amounts, setAmounts],[total, setTotal],[amountP, setAmountsP],[totalP, setTotalP],[amountC, setAmountsC],[totalC, setTotalC],[amountF, setAmountsF],[totalF, setTotalF]]}>
       <AllergySettingsProvider>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">

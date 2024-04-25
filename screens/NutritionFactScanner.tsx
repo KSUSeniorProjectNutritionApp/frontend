@@ -9,16 +9,60 @@ const NutritionFactScreen: React.FC<{route: any; navigation: any}> = ({
 }) => {
   const {allergyToggles} = useAllergySettings();
   const itemInfo = route.params.data;
-  let [[dailyItems, setDailyItems], [dailyNutrients, setDailyNutrients], [amounts, setAmounts], [total, setTotal]] = useContext(dailyContext);
+  let [[dailyItems, setDailyItems], [dailyNutrients, setDailyNutrients],[amounts, setAmounts],[total, setTotal],[amountP, setAmountsP],[totalP, setTotalP],[amountC, setAmountsC],[totalC, setTotalC],[amountF, setAmountsF],[totalF, setTotalF]] = useContext(dailyContext);
 
   const myPush = (data) => {
     dailyItems.push(data)
     dailyNutrients.push(data.foodNutrients)
-    amounts.push(findEnergy(data.foodNutrients))
+    const adjusted = (value) => {return value/100*(data.servingSize || 100)}
+    amounts.push(adjusted(findEnergy(data.foodNutrients)))
+    amountC.push(adjusted(findCarbs(data.foodNutrients)))
+    amountF.push(adjusted(findFat(data.foodNutrients)))
+    amountP.push(adjusted(findProtein(data.foodNutrients)))
+
+  }
+  const findCarbs = (nutrients) => {
+      let simplify = nutrients.map(element => {
+        return [element.amount, element.nutrient.name]
+    })
+
+    for (let step = 0; step < simplify.length; step++) {
+      [num, name] = simplify[step]
+      if (name.toUpperCase().includes('CARBO')) {
+          return num
+      }
+    }
+    return 0;
   }
 
+  const findFat = (nutrients) => {
+    let simplify = nutrients.map(element => {
+      return [element.amount, element.nutrient.name]
+  })
+
+  for (let step = 0; step < simplify.length; step++) {
+    [num, name] = simplify[step]
+    if (name.toUpperCase().includes('FAT')) {
+        return num
+    }
+  }
+  return 0;
+}
+
+const findProtein = (nutrients) => {
+    let simplify = nutrients.map(element => {
+      return [element.amount, element.nutrient.name]
+  })
+
+  for (let step = 0; step < simplify.length; step++) {
+    [num, name] = simplify[step]
+    if (name.toUpperCase().includes('PROTEIN')) {
+        return num
+    }
+  }
+  return 0;
+}
   const findEnergy = (nutrients)=>{
-    console.log()
     let simplify = nutrients.map(element => {
         return [element.amount, element.nutrient.name]
     })
@@ -339,12 +383,17 @@ const NutritionFactScreen: React.FC<{route: any; navigation: any}> = ({
             Alert.alert('Already added')
             return
           }
+          // console.log('Entering hooks')
             myPush(itemInfo);
             // console.log(dailyItems)
             setDailyItems(dailyItems)
             setDailyNutrients(dailyNutrients)
             setAmounts(amounts)
             setTotal(() => {return amounts.reduce((a, b) => a+b, 0)})
+            setTotalC(() => {return amountC.reduce((a, b) => a+b, 0)})
+            setTotalP(() => {return amountP.reduce((a, b) => a+b, 0)})
+            setTotalF(() => {return amountF.reduce((a, b) => a+b, 0)})
+            // console.log('Exiting hooks')
             Alert.alert('Added Item to List')
           }}><Text style= {styles.scanButtonText}>Add to Daily Total</Text></TouchableOpacity>
         </View>
