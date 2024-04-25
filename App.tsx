@@ -12,6 +12,9 @@ import NutritionFactScreen from './screens/NutritionFactScanner';
 import SettingsScreen from './screens/SettingsScreen';
 import OnboardingScreen from './screens/OnboardingScreen';
 import {LoginScreen, SignupScreen} from './screens/LoginSignupScreen';
+import DailyNutrition from './screens/DailyNutritionTotal';
+import { useState } from 'react';
+import { dailyContext } from './screens/NutritionContext';
 //little notes!
 /*
 npx react-native start --reset-cache
@@ -21,21 +24,29 @@ npx react-native start --reset-cache
 const Stack = createNativeStackNavigator();
 
 function App() {
+  const [items, setItems] = useState([])
+  const [nutrients, setNutrients] = useState([])
+  const [amounts, setAmounts] = useState([]);
+  const [total, setTotal] = useState(0);
+
   return (
-    <AllergySettingsProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Signup" component={SignupScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Nutrition" component={NutritionFactScreen} />
-          <Stack.Screen name="Scanner" component={ScannerView} />
-          <Stack.Screen name="Profile" component={ProfileScreen} />
-          <Stack.Screen name="Settings" component={SettingsScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </AllergySettingsProvider>
+    <dailyContext.Provider value={[[items, setItems], [nutrients, setNutrients],[amounts, setAmounts],[total, setTotal]]}>
+      <AllergySettingsProvider>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Home">
+            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Signup" component={SignupScreen} />
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Nutrition" component={NutritionFactScreen} />
+            <Stack.Screen name="Scanner" component={ScannerView} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="Settings" component={SettingsScreen} />
+            <Stack.Screen name="Daily" component={DailyNutrition} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AllergySettingsProvider>
+    </dailyContext.Provider>
   );
 }
 

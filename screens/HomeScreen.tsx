@@ -106,6 +106,12 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
         disabled={isLoading}>
         <Text style={styles.scanButtonText}>Allergy Settings ⚙️</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.scanButton}
+        onPress={() => navigation.navigate('Daily')}
+        disabled={isLoading}>
+        <Text style={styles.scanButtonText}>Daily Total</Text>
+      </TouchableOpacity>
     </View>
   );
 };

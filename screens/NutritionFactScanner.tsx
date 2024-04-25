@@ -1,6 +1,7 @@
-import React, {useEffect} from 'react';
-import {View, Text, StyleSheet, FlatList, Alert} from 'react-native';
+import React, {useEffect, useContext} from 'react';
+import {View, Text, StyleSheet, FlatList, Alert, Button, TouchableOpacity} from 'react-native';
 import {useAllergySettings} from './AllergySettingsContext';
+import { dailyContext } from './NutritionContext';
 
 const NutritionFactScreen: React.FC<{route: any; navigation: any}> = ({
   route,
@@ -8,7 +9,28 @@ const NutritionFactScreen: React.FC<{route: any; navigation: any}> = ({
 }) => {
   const {allergyToggles} = useAllergySettings();
   const itemInfo = route.params.data;
+  let [[dailyItems, setDailyItems], [dailyNutrients, setDailyNutrients], [amounts, setAmounts], [total, setTotal]] = useContext(dailyContext);
 
+  const myPush = (data) => {
+    dailyItems.push(data)
+    dailyNutrients.push(data.foodNutrients)
+    amounts.push(findEnergy(data.foodNutrients))
+  }
+
+  const findEnergy = (nutrients)=>{
+    console.log()
+    let simplify = nutrients.map(element => {
+        return [element.amount, element.nutrient.name]
+    })
+    
+    for (let step = 0; step < simplify.length; step++) {
+        [num, name] = simplify[step]
+        if (name == 'Energy') {
+            return num
+        }
+    }
+    return 0;
+}
   const allergens = {
     MILK: [
       'BUTTER',
@@ -306,11 +328,32 @@ const NutritionFactScreen: React.FC<{route: any; navigation: any}> = ({
       ListHeaderComponent={
         <View style={styles.headerContainer}>
           <Text style={styles.header}>Nutrition Facts</Text>
+          <TouchableOpacity
+          style={styles.scanButton}
+          onPress={() => {
+            let simplify = dailyItems.map(element => {
+              return element.description
+          })
+          if (simplify.includes(itemInfo.description)) {
+            console.log("Declining to add duplicates")
+            Alert.alert('Already added')
+            return
+          }
+            myPush(itemInfo);
+            // console.log(dailyItems)
+            setDailyItems(dailyItems)
+            setDailyNutrients(dailyNutrients)
+            setAmounts(amounts)
+            setTotal(() => {return amounts.reduce((a, b) => a+b, 0)})
+            Alert.alert('Added Item to List')
+          }}><Text style= {styles.scanButtonText}>Add to Daily Total</Text></TouchableOpacity>
         </View>
       }
     />
   );
 };
+
+
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -345,6 +388,22 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     color: '#5F4B32',
     fontSize: 18,
+  },
+  scanButton: {
+    backgroundColor: '#FFB07B',
+    padding: 20,
+    borderRadius: 20,
+    marginBottom: 20,
+    marginHorizontal: '20%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+
+  },
+  scanButtonText: {
+    fontSize: 18,
+    color: 'white',
   },
 });
 
