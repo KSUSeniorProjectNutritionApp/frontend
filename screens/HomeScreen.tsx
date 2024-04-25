@@ -69,6 +69,7 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
       <TextInput
         style={styles.searchBar}
         placeholder="Search for food items"
+        placeholderTextColor={'#808080'}
         value={searchText}
         onChangeText={handleSearch}
         editable={!isLoading}
@@ -156,6 +157,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: '#FAD4C0',
     backgroundColor: '#FFF5EE',
+    color: '#000'
   },
   scanButton: {
     backgroundColor: '#FFB07B',
