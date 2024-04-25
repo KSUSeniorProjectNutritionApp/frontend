@@ -5,7 +5,7 @@ type AllergyToggles = {
   eggs: boolean;
   fish: boolean;
   shellfish: boolean;
-  treeNuts: boolean;
+  tree_Nuts: boolean;
   peanuts: boolean;
   wheat: boolean;
   soy: boolean;
@@ -28,7 +28,7 @@ export const AllergySettingsProvider: React.FC<{children: ReactNode}> = ({
     eggs: false,
     fish: false,
     shellfish: false,
-    treeNuts: false,
+    tree_Nuts: false,
     peanuts: false,
     wheat: false,
     soy: false,
