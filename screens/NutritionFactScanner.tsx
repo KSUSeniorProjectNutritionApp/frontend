@@ -381,14 +381,17 @@ const findProtein = (nutrients) => {
           if (simplify.includes(itemInfo.description)) {
             console.log("Declining to add duplicates")
             Alert.alert('Already added')
-            return
-          }
+          } else{
           // console.log('Entering hooks')
             myPush(itemInfo);
+          }
             // console.log(dailyItems)
             setDailyItems(dailyItems)
             setDailyNutrients(dailyNutrients)
             setAmounts(amounts)
+            setAmountsC(amountC)
+            setAmountsP(amountP)
+            setAmountsF(amountF)
             setTotal(() => {return amounts.reduce((a, b) => a+b, 0)})
             setTotalC(() => {return amountC.reduce((a, b) => a+b, 0)})
             setTotalP(() => {return amountP.reduce((a, b) => a+b, 0)})

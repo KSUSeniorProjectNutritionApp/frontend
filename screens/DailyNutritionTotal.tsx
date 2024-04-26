@@ -92,10 +92,10 @@ const DailyNutrition: React.FC<{navigation: any}> = ({navigation}) => {
         }
     }
     return (<View style = {styles.headerContainer}>
-        <Text style={styles.header}>{`Daily Calories: ${total.toFixed(2)}`}</Text>
-        <Text style={styles.header}>{`Daily Carbohydrates: ${totalC.toFixed(2)}`}</Text>
-        <Text style={styles.header}>{`Daily Fat: ${totalF.toFixed(2)}`}</Text>
-        <Text style={styles.header}>{`Daily Protein: ${totalP.toFixed(2)}`}</Text>
+        <Text style={styles.header}>{`Daily Calories: ${total.toFixed(2)} Cal`}</Text>
+        <Text style={styles.header}>{`Daily Carbohydrates: ${totalC.toFixed(2)} g`}</Text>
+        <Text style={styles.header}>{`Daily Fat: ${totalF.toFixed(2)} g`}</Text>
+        <Text style={styles.header}>{`Daily Protein: ${totalP.toFixed(2)} g`}</Text>
 
         <FlatList
         data={items}
@@ -123,6 +123,8 @@ const DailyNutrition: React.FC<{navigation: any}> = ({navigation}) => {
                     amountC[index] = Number(num)*adjusted(carb)/(item.servingSize || 100)
                     amountF[index] = Number(num)*adjusted(fat)/(item.servingSize || 100)
                     console.log(amounts[index])
+                    setItems(items)
+                    setNutrients(nutrients)
                     setAmounts(amounts)
                     setAmountsC(amountC)
                     setAmountsF(amountF)
@@ -139,7 +141,11 @@ const DailyNutrition: React.FC<{navigation: any}> = ({navigation}) => {
              </View>)}/>
             <TouchableOpacity
             style={styles.scanButton}
-            onPress={() => {setItems([])
+            onPress={() => {
+                if(items.length == 0) {
+                    return;
+                }
+                setItems([])
                 setNutrients([])
                 setAmounts([])
                 setAmountsC([])

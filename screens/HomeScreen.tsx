@@ -110,7 +110,7 @@ const HomeScreen: React.FC<{navigation: any}> = ({navigation}) => {
         style={styles.scanButton}
         onPress={() => navigation.navigate('Daily')}
         disabled={isLoading}>
-        <Text style={styles.scanButtonText}>Daily Total</Text>
+        <Text style={styles.scanButtonText}>Daily Total 📋</Text>
       </TouchableOpacity>
     </View>
   );
